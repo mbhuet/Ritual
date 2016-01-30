@@ -24,7 +24,6 @@ public class BeatManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		BeginBeat();
 	}
 	
 	// Update is called once per frame
@@ -32,10 +31,16 @@ public class BeatManager : MonoBehaviour {
 		Debug.Log (SecondsUntilBeat ());
 	}
 
-	void BeginBeat(){
+	public void BeginBeat(){
+		if (isPlaying)
+			return;
 		startTime = Time.time;
 		isPlaying = true;
 		StartCoroutine ("BeatSound");
+	}
+
+	public void EndBeat(){
+		isPlaying = false;
 	}
 
 	//returns the millis of the upcoming beat
@@ -45,19 +50,24 @@ public class BeatManager : MonoBehaviour {
 	}
 
 	public float SecondsUntilBeat(){
-		float timeToBeat = beatSeconds - (Time.time - startTime)%beatSeconds;
+		float timeToBeat = beatSeconds - SecondsSinceLastBeat();
 		return timeToBeat;
+	}
+
+	public float SecondsSinceLastBeat(){
+		float timeFromBeat = (Time.time - startTime)%beatSeconds;
+		return timeFromBeat;
 	}
 
 	void PlayBeatClip(){
 		audio.PlayOneShot(beatClip);
-		Debug.Log("BeatSound");
 	}
 
 
 	private IEnumerator BeatSound(){
 		while(isPlaying){
 			OnBeat();
+			Debug.Log("BeatSound");
 		yield return new WaitForSeconds(SecondsUntilBeat());
 		
 		}
