@@ -15,7 +15,6 @@ public enum Gesture{
 
 }
 
-[RequireComponent(typeof(Animator))]
 public class Arm : MonoBehaviour {
 	public List<Gesture> sequence;
 	int gestureIndex=-1;
@@ -24,7 +23,7 @@ public class Arm : MonoBehaviour {
 
 	void Awake(){
 		BeatManager.OnBeat += TriggerNextGesture;
-		animator = this.GetComponent<Animator> ();
+		animator = this.GetComponentInChildren<Animator> ();
 	}
 
 	// Use this for initialization
@@ -45,10 +44,10 @@ public class Arm : MonoBehaviour {
 		}
 		switch (sequence [gestureIndex]) {
 		case Gesture.FISTBUMP:
-			animator.SetTrigger("FistBump");
+			animator.SetTrigger("SideSlap");
 			break;
 		case Gesture.WIDEFIVE:
-			animator.SetTrigger("WideFive");
+			animator.SetTrigger("SideSlap");
 			break;
 		default:
 			break;
